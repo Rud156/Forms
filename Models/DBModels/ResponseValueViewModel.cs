@@ -2,28 +2,23 @@ using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Forms.Models
+namespace Forms.Models.DBModels
 {
-  public class FieldViewModel
+  public class ResponseValueViewModel
   {
     [BsonId]
     public ObjectId Id { get; set; }
 
     [BsonRequired]
-    public ObjectId formId { get; set; }
+    public ObjectId fieldId { get; set; }
 
     [BsonRequired]
-    public string fieldType { get; set; }
+    public string responseType { get; set; }
 
     [BsonRequired]
     public int index { get; set; }
 
     [BsonRequired]
-    public string title { get; set; }
-
-    [BsonRequired]
-    public DateTime createdAt { get; set; }
-
     public object value { get; set; }
   }
 }

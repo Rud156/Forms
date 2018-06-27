@@ -1,7 +1,7 @@
 using System;
-using Forms.Models;
+using Forms.Models.DBModels;
 
-namespace Forms.GenericModels
+namespace Forms.Models.ResponseModels
 {
   public class FormObjectViewModel
   {

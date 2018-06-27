@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Forms.Models;
-using Forms.GenericModels;
+using Forms.Models.DBModels;
+using Forms.Models.NewModels;
+using Forms.Models.ResponseModels;
 
 namespace Forms.Services
 {
@@ -14,9 +15,9 @@ namespace Forms.Services
 
     Task<IEnumerable<FormObjectViewModel>> GetFormsCreatedBy(string createdBy);
 
-    Task<FormObjectViewModel> CreateForm(FormObjectViewModel form);
+    Task<FormObjectViewModel> CreateForm(NewFormViewModel form);
 
-    Task<FieldViewModel> AddNewFieldToForm(FieldViewModel field, string formId);
+    Task<FieldViewModel> AddNewFieldToForm(NewFieldViewModel field, string formId);
 
     Task<FormObjectViewModel> UpdateFormTitle(string formId, string newFormTitle);
 
