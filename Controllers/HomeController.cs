@@ -8,18 +8,18 @@ using Forms.Models.DBModels;
 
 namespace Forms.Controllers
 {
-  [Produces("application/json")]
-  [Route(""), Route("api")]
-  public class HomeController : Controller
-  {
-    [HttpGet]
-    public IActionResult Index()
+    [Produces("application/json")]
+    [Route(""), Route("api")]
+    public class HomeController : Controller
     {
-      return Ok(new
-      {
-        success = true,
-        message = "Hello World"
-      });
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return Ok(new
+            {
+                success = true,
+                message = "Hello World"
+            });
+        }
     }
-  }
 }

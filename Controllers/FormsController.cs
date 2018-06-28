@@ -8,10 +8,10 @@ using Forms.Models.DBModels;
 
 namespace Forms.Controllers
 {
-  [Produces("application/json")]
-  [Route("api/[controller]")]
-  public class FormsController : Controller
-  {
+    [Produces("application/json")]
+    [Route("api/[controller]")]
+    public class FormsController : Controller
+    {
 
-  }
+    }
 }

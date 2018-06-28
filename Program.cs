@@ -20,6 +20,7 @@ namespace Forms
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseUrls($"{Config.Config.hostUrl}{Config.Config.PORT}");
     }
 }
