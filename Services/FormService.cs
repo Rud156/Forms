@@ -15,7 +15,7 @@ namespace Forms.Services
     {
         private IMongoClient _client;
         private IMongoDatabase _database;
-        private IMongoCollection<FormObjectViewModel> _formCollection;
+        private IMongoCollection<FormViewModel> _formCollection;
         private IMongoCollection<FieldViewModel> _fieldCollection;
         private IMongoCollection<ResponseViewModel> _responseCollection;
 
@@ -34,13 +34,17 @@ namespace Forms.Services
                 throw new Exception("Unable to connect to MongoDB. Aborting...");
 
 
-            _formCollection = _database.GetCollection<FormObjectViewModel>(Config.Config.FormCollectionName);
+            _formCollection = _database.GetCollection<FormViewModel>(Config.Config.FormCollectionName);
             _fieldCollection = _database.GetCollection<FieldViewModel>(Config.Config.FieldCollectionName);
             _responseCollection = _database.GetCollection<ResponseViewModel>(Config.Config.ResponseCollectionName);
         }
 
-        public Task<FormObjectViewModel> GetForm(string formId)
+        public async Task<FormObjectViewModel> GetForm(string formId)
         {
+            ObjectId formObjectId = ObjectId.Parse(formId);
+            var task = await _formCollection.FindAsync(_ => _.Id == formObjectId);
+            
+
             throw new NotImplementedException();
         }
 
