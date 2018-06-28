@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Forms.Models.DBModels
 {
+    [BsonIgnoreExtraElements]
     public class FieldViewModel
     {
         [BsonId]

@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Forms.Models.DBModels
 {
+    [BsonIgnoreExtraElements]
     public class FormViewModel
     {
         [BsonId]
@@ -17,6 +18,7 @@ namespace Forms.Models.DBModels
 
         [BsonRequired]
         public DateTime createdAt { get; set; }
+
         public ObjectId[] fields { get; set; }
     }
 }

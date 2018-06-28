@@ -6,7 +6,7 @@ namespace Forms.Config
     {
         public const string DBUri = "mongodb://localhost:27017";
 
-        public const string DBName = "Forms";
+        public const string DBName = "xeno";
 
         public const string FormCollectionName = "forms";
 
