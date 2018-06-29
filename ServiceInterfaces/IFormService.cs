@@ -11,7 +11,7 @@ namespace Forms.ServiceInterfaces
     {
         Task<FormObjectViewModel> GetForm(ObjectId formId);
 
-        Task<FieldViewModel> GetField(ObjectId fieldId);
+        Task<FieldViewModel> GetField(ObjectId formId, ObjectId fieldId);
 
         Task<IEnumerable<FormViewModel>> GetFormsCreatedBy(string createdBy);
 
@@ -19,14 +19,14 @@ namespace Forms.ServiceInterfaces
 
         Task<FieldViewModel> AddNewFieldToForm(NewFieldViewModel field, ObjectId formId);
 
-        Task<FormViewModel> UpdateFormTitle(ObjectId formId, string newFormTitle);
+        Task<FormObjectViewModel> UpdateFormTitle(ObjectId formId, string newFormTitle);
 
-        Task<FieldViewModel> UpdateField(FieldViewModel field, ObjectId fieldId);
+        Task<FieldViewModel> UpdateField(FieldViewModel field, ObjectId formId, ObjectId fieldId);
 
-        Task<bool> DeleteField(ObjectId fieldId, ObjectId formId);
+        Task<bool> DeleteField(ObjectId formId, ObjectId fieldId);
 
         Task<bool> DeleteForm(ObjectId formId);
 
-        Task<bool> DeleteFormsCreatedBy(string createdBy);
+        Task<long> DeleteFormsCreatedBy(string createdBy);
     }
 }

@@ -136,16 +136,22 @@ namespace Forms.Services
             return responseDeleteResult.IsAcknowledged;
         }
 
-        public async Task<bool> DeleteResponsesForForm(ObjectId formId)
+        public async Task<long> DeleteResponsesForForm(ObjectId formId)
         {
             DeleteResult responseDeleteResult = await responseCollection.DeleteManyAsync(_ => _.formId == formId);
-            return responseDeleteResult.IsAcknowledged;
+            if (!responseDeleteResult.IsAcknowledged)
+                throw new Exception("Unable to responses");
+
+            return responseDeleteResult.DeletedCount;
         }
 
-        public async Task<bool> DeleteResponsesCreatedBy(string createdBy)
+        public async Task<long> DeleteResponsesCreatedBy(string createdBy)
         {
             DeleteResult responseDeleteResult = await responseCollection.DeleteManyAsync(_ => _.createdBy == createdBy);
-            return responseDeleteResult.IsAcknowledged;
+            if (!responseDeleteResult.IsAcknowledged)
+                throw new Exception("Unable to responses");
+
+            return responseDeleteResult.DeletedCount;
         }
     }
 }

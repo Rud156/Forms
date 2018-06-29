@@ -20,8 +20,8 @@ namespace Forms.ServiceInterfaces
 
         Task<bool> DeleteResponse(ObjectId responseId);
 
-        Task<bool> DeleteResponsesForForm(ObjectId formId);
+        Task<long> DeleteResponsesForForm(ObjectId formId);
 
-        Task<bool> DeleteResponsesCreatedBy(string createdBy);
+        Task<long> DeleteResponsesCreatedBy(string createdBy);
     }
 }

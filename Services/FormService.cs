@@ -48,9 +48,9 @@ namespace Forms.Services
             return FormUtils.CombineFormAndFields(form, fields);
         }
 
-        public async Task<FieldViewModel> GetField(ObjectId fieldId)
+        public async Task<FieldViewModel> GetField(ObjectId formId, ObjectId fieldId)
         {
-            var fieldTask = await fieldCollection.FindAsync(_ => _.Id == fieldId);
+            var fieldTask = await fieldCollection.FindAsync(_ => _.Id == fieldId && _.formId == formId);
             return await fieldTask.SingleOrDefaultAsync();
         }
 
@@ -114,23 +114,23 @@ namespace Forms.Services
             return fieldViewModel;
         }
 
-        public async Task<FormViewModel> UpdateFormTitle(ObjectId formId, string newFormTitle)
+        public async Task<FormObjectViewModel> UpdateFormTitle(ObjectId formId, string newFormTitle)
         {
             UpdateResult formUpdateResult = await formCollection.UpdateOneAsync(_ => _.Id == formId,
                 Builders<FormViewModel>.Update.Set(_ => _.formTitle, newFormTitle));
 
             if (formUpdateResult.IsAcknowledged)
             {
-                var formTask = await formCollection.FindAsync(_ => _.Id == formId);
-                return await formTask.SingleOrDefaultAsync();
+                return await GetForm(formId);
             }
             else
                 throw new Exception("Unable to update form title");
         }
 
-        public async Task<FieldViewModel> UpdateField(FieldViewModel field, ObjectId fieldId)
+        public async Task<FieldViewModel> UpdateField(FieldViewModel field, ObjectId formId, ObjectId fieldId)
         {
-            UpdateResult fieldUpdateResult = await fieldCollection.UpdateOneAsync(_ => _.Id == fieldId,
+            UpdateResult fieldUpdateResult = await fieldCollection.UpdateOneAsync(
+                _ => _.Id == fieldId && _.formId == formId,
                 Builders<FieldViewModel>.Update
                 .Set(_ => _.title, field.title)
                 .Set(_ => _.fieldType, field.fieldType)
@@ -146,7 +146,7 @@ namespace Forms.Services
                 throw new Exception("Unable to update field content");
         }
 
-        public async Task<bool> DeleteField(ObjectId fieldId, ObjectId formId)
+        public async Task<bool> DeleteField(ObjectId formId, ObjectId fieldId)
         {
             UpdateResult formUpdateResult = await formCollection.UpdateOneAsync(_ => _.Id == formId,
                 Builders<FormViewModel>.Update
@@ -155,7 +155,7 @@ namespace Forms.Services
                 throw new Exception("Unable to delete field");
 
             DeleteResult fieldDeleteResult = await fieldCollection.DeleteOneAsync(_ => _.Id == fieldId);
-            return fieldDeleteResult.IsAcknowledged;
+            return true;
         }
 
         public async Task<bool> DeleteForm(ObjectId formId)
@@ -169,7 +169,7 @@ namespace Forms.Services
             return true;
         }
 
-        public async Task<bool> DeleteFormsCreatedBy(string createdBy)
+        public async Task<long> DeleteFormsCreatedBy(string createdBy)
         {
             var formTask = await formCollection.FindAsync(_ => _.createdBy == createdBy);
             List<FormViewModel> forms = await formTask.ToListAsync();
@@ -182,7 +182,7 @@ namespace Forms.Services
 
             await fieldCollection.DeleteManyAsync(_ => formObjectIds.Contains(_.formId));
 
-            return true;
+            return formDeleteResult.DeletedCount;
         }
     }
 }
