@@ -1,13 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Forms.Models.NewModels
 {
     public class NewFieldViewModel
     {
-        public string formId { get; set; }
-
+        [Required]
         public string fieldType { get; set; }
 
+        [Required]
         public int index { get; set; }
 
+        [Required]
         public string title { get; set; }
 
         public object value { get; set; }

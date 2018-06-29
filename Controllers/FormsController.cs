@@ -99,13 +99,28 @@ namespace Forms.Controllers
                     message = "Invalid Request Body"
                 });
 
-            FormObjectViewModel savedForm = await formService.CreateForm(form);
-            return Created($"{Request.Host}{Request.PathBase}{Request.Path}",
-            new
+            try
             {
-                success = true,
-                form = savedForm
-            });
+                FormObjectViewModel savedForm = await formService.CreateForm(form);
+                return Created($"{Request.Host}{Request.PathBase}{Request.Path}",
+                new
+                {
+                    success = true,
+                    form = savedForm
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new JsonResult(new
+                {
+                    success = false,
+                    message = e.Message
+                })
+                {
+                    StatusCode = 500
+                };
+            }
 
         }
 
@@ -127,13 +142,29 @@ namespace Forms.Controllers
                     message = "Invalid Form Id"
                 });
 
-            FieldViewModel savedField = await formService.AddNewFieldToForm(field, formObjectId);
-            return Created($"{Request.Host}{Request.PathBase}{Request.Path}",
-            new
+            try
             {
-                success = true,
-                field = savedField
-            });
+                FieldViewModel savedField = await formService.AddNewFieldToForm(field, formObjectId);
+                return Created($"{Request.Host}{Request.PathBase}{Request.Path}",
+                new
+                {
+                    success = true,
+                    field = savedField
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new JsonResult(new
+                {
+                    success = false,
+                    message = e.Message
+                })
+                {
+                    StatusCode = 500
+                };
+            }
+
         }
 
         [HttpPatch("{formId}")]

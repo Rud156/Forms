@@ -67,6 +67,10 @@ namespace Forms.Services
 
             foreach (var field in form.fields)
             {
+                string fieldType = field.fieldType;
+                if (!TypeConstants.isValidFieldType(fieldType))
+                    throw new Exception("Invalid Field Type");
+
                 FieldViewModel fieldViewModel = new FieldViewModel
                 {
                     Id = ObjectId.GenerateNewId(),
@@ -86,7 +90,7 @@ namespace Forms.Services
                 Id = formId,
                 createdAt = DateTime.UtcNow,
                 createdBy = form.createdBy,
-                formTitle = form.formTitle,
+                formTitle = form.title,
             };
 
             await formCollection.InsertOneAsync(formViewModel);
@@ -96,6 +100,9 @@ namespace Forms.Services
         public async Task<FieldViewModel> AddNewFieldToForm(NewFieldViewModel field, ObjectId formId)
         {
             ObjectId fieldObjectId = ObjectId.GenerateNewId();
+
+            if (!TypeConstants.isValidFieldType(field.fieldType))
+                throw new Exception("Invalid Field Type");
 
             FieldViewModel fieldViewModel = new FieldViewModel
             {
@@ -129,6 +136,9 @@ namespace Forms.Services
 
         public async Task<FieldViewModel> UpdateField(FieldViewModel field, ObjectId formId, ObjectId fieldId)
         {
+            if (!TypeConstants.isValidFieldType(field.fieldType))
+                throw new Exception("Invalid Field Type");
+
             UpdateResult fieldUpdateResult = await fieldCollection.UpdateOneAsync(
                 _ => _.Id == fieldId && _.formId == formId,
                 Builders<FieldViewModel>.Update

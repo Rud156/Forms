@@ -84,6 +84,9 @@ namespace Forms.Services
             List<ResponseValueViewModel> responseValues = new List<ResponseValueViewModel>();
             foreach (var responseValue in response.responseValues)
             {
+                if (!TypeConstants.isValidFieldType(responseValue.responseType))
+                    throw new Exception("Invalid Response Type");
+
                 ResponseValueViewModel responseValueViewModel = new ResponseValueViewModel
                 {
                     Id = ObjectId.GenerateNewId(),
