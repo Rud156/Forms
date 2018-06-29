@@ -8,6 +8,7 @@ using Forms.Models.DBModels;
 using Forms.Models.NewModels;
 using Forms.Models.ResponseModels;
 using Forms.Utils;
+using Forms.ServiceInterfaces;
 
 namespace Forms.Services
 {
@@ -17,11 +18,10 @@ namespace Forms.Services
         private IMongoDatabase database;
         private IMongoCollection<FormViewModel> formCollection;
         private IMongoCollection<FieldViewModel> fieldCollection;
-        private IMongoCollection<ResponseViewModel> responseCollection;
 
         public FormService() => ConnectToDatabase();
 
-        public void ConnectToDatabase()
+        private void ConnectToDatabase()
         {
             MongoUrl mongoUrl = new MongoUrl($"{Config.Config.DBUri}/{Config.Config.DBName}");
             client = new MongoClient(mongoUrl);
@@ -36,7 +36,6 @@ namespace Forms.Services
 
             formCollection = database.GetCollection<FormViewModel>(Config.Config.FormCollectionName);
             fieldCollection = database.GetCollection<FieldViewModel>(Config.Config.FieldCollectionName);
-            responseCollection = database.GetCollection<ResponseViewModel>(Config.Config.ResponseCollectionName);
         }
 
         public async Task<FormObjectViewModel> GetForm(ObjectId formObjectId)
@@ -126,7 +125,7 @@ namespace Forms.Services
                 return await formTask.SingleOrDefaultAsync();
             }
             else
-                return null;
+                throw new Exception("Unable to update form title");
         }
 
         public async Task<FieldViewModel> UpdateField(FieldViewModel field, ObjectId fieldId)
@@ -144,7 +143,7 @@ namespace Forms.Services
                 return await fieldTask.SingleOrDefaultAsync();
             }
             else
-                return null;
+                throw new Exception("Unable to update field content");
         }
 
         public async Task<bool> DeleteField(ObjectId fieldId, ObjectId formId)
@@ -153,7 +152,7 @@ namespace Forms.Services
                 Builders<FormViewModel>.Update
                 .Pull(_ => _.fields, fieldId));
             if (!formUpdateResult.IsAcknowledged)
-                return false;
+                throw new Exception("Unable to delete field");
 
             DeleteResult fieldDeleteResult = await fieldCollection.DeleteOneAsync(_ => _.Id == fieldId);
             return fieldDeleteResult.IsAcknowledged;
@@ -163,7 +162,7 @@ namespace Forms.Services
         {
             DeleteResult formDeleteResult = await formCollection.DeleteOneAsync(_ => _.Id == formId);
             if (!formDeleteResult.IsAcknowledged)
-                return false;
+                throw new Exception("Unable to delete form");
 
             await fieldCollection.DeleteManyAsync(_ => _.formId == formId);
 
@@ -179,7 +178,7 @@ namespace Forms.Services
 
             DeleteResult formDeleteResult = await formCollection.DeleteManyAsync(_ => _.createdBy == createdBy);
             if (!formDeleteResult.IsAcknowledged)
-                return false;
+                throw new Exception($"Unable to delete forms created by {createdBy}");
 
             await fieldCollection.DeleteManyAsync(_ => formObjectIds.Contains(_.formId));
 

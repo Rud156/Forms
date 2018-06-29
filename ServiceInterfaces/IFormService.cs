@@ -5,7 +5,7 @@ using Forms.Models.DBModels;
 using Forms.Models.NewModels;
 using Forms.Models.ResponseModels;
 
-namespace Forms.Services
+namespace Forms.ServiceInterfaces
 {
     public interface IFormService
     {

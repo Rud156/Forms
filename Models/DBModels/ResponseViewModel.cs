@@ -20,9 +20,6 @@ namespace Forms.Models.DBModels
         public DateTime createdAt { get; set; }
 
         [BsonRequired]
-        public DateTime updatedAt { get; set; }
-
-        [BsonRequired]
         public ResponseValueViewModel[] responseValues { get; set; }
     }
 }

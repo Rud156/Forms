@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Forms.Services;
+using Forms.ServiceInterfaces;
 
 namespace Forms
 {
@@ -32,6 +33,7 @@ namespace Forms
             services.AddCors();
             services.AddResponseCompression();
             services.AddSingleton<IFormService, FormService>();
+            services.AddSingleton<IResponseService, ResponseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

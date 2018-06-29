@@ -1,0 +1,60 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using Forms.Models.DBModels;
+using Forms.Models.NewModels;
+
+namespace Forms.Utils
+{
+    public static class ResponseUtils
+    {
+        public static bool ResponseValidator(List<FieldViewModel> fields,
+            List<NewResponseValuesViewModel> responseValues)
+        {
+            fields.Sort((a, b) => a.index.CompareTo(b.index));
+            responseValues.Sort((a, b) => a.index.CompareTo(b.index));
+
+            bool formValid = true;
+
+            for (int i = 0; i < fields.Count; i++)
+            {
+                string responseType = responseValues[i].responseType;
+
+                if (
+                    responseType != TypeConstants.SINGLE_LINE_INPUT &&
+                    responseType != TypeConstants.PARAGRAPH_TEXT_INPUT &&
+                    responseType != TypeConstants.DATE_INPUT &&
+                    responseType != TypeConstants.TIME_INPUT &&
+                    responseType != TypeConstants.FILE_UPLOAD
+                )
+                {
+                    if (responseType == TypeConstants.CHECKBOX_INPUT)
+                    {
+                        string[] values = responseValues[i].value as string[];
+                        HashSet<string> fieldValue = new HashSet<string>(fields[i].value as string[]);
+                        foreach (var value in values)
+                        {
+                            if (!fieldValue.Contains(value))
+                            {
+                                formValid = false;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        string value = responseValues[i].value as string;
+                        string[] fieldValue = fields[i].value as string[];
+                        if (!fieldValue.Contains(value))
+                        {
+                            formValid = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return formValid;
+        }
+    }
+}
