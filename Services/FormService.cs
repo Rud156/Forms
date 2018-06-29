@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using Forms.ServiceInterfaces;
 using Forms.Models.DBModels;
 using Forms.Models.NewModels;
 using Forms.Models.ResponseModels;
@@ -40,9 +39,8 @@ namespace Forms.Services
             responseCollection = database.GetCollection<ResponseViewModel>(Config.Config.ResponseCollectionName);
         }
 
-        public async Task<FormObjectViewModel> GetForm(string formId)
+        public async Task<FormObjectViewModel> GetForm(ObjectId formObjectId)
         {
-            ObjectId formObjectId = ObjectId.Parse(formId);
             var formTask = await formCollection.FindAsync(_ => _.Id == formObjectId);
             var fieldTask = await fieldCollection.FindAsync(_ => _.formId == formObjectId);
 
@@ -51,49 +49,141 @@ namespace Forms.Services
             return FormUtils.CombineFormAndFields(form, fields);
         }
 
-        public Task<FieldViewModel> GetField(string fieldId)
+        public async Task<FieldViewModel> GetField(ObjectId fieldId)
         {
-            throw new NotImplementedException();
+            var fieldTask = await fieldCollection.FindAsync(_ => _.Id == fieldId);
+            return await fieldTask.SingleOrDefaultAsync();
         }
 
-        public Task<IEnumerable<FormObjectViewModel>> GetFormsCreatedBy(string createdBy)
+        public async Task<IEnumerable<FormViewModel>> GetFormsCreatedBy(string createdBy)
         {
-            throw new NotImplementedException();
+            var formTask = await formCollection.FindAsync(_ => _.createdBy == createdBy);
+            return await formTask.ToListAsync();
         }
 
-        public Task<FormObjectViewModel> CreateForm(NewFormViewModel form)
+        public async Task<FormObjectViewModel> CreateForm(NewFormViewModel form)
         {
-            throw new NotImplementedException();
+            ObjectId formId = ObjectId.GenerateNewId();
+            List<FieldViewModel> fields = new List<FieldViewModel>();
+
+            foreach (var field in form.fields)
+            {
+                FieldViewModel fieldViewModel = new FieldViewModel
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    formId = formId,
+                    fieldType = field.fieldType,
+                    index = field.index,
+                    title = field.title,
+                    createdAt = DateTime.UtcNow,
+                    value = field.value
+                };
+                fields.Add(fieldViewModel);
+            }
+            await fieldCollection.InsertManyAsync(fields);
+
+            FormViewModel formViewModel = new FormViewModel
+            {
+                Id = formId,
+                createdAt = DateTime.UtcNow,
+                createdBy = form.createdBy,
+                formTitle = form.formTitle,
+            };
+
+            await formCollection.InsertOneAsync(formViewModel);
+            return FormUtils.CombineFormAndFields(formViewModel, fields);
         }
 
-        public Task<FieldViewModel> AddNewFieldToForm(NewFieldViewModel field, string formId)
+        public async Task<FieldViewModel> AddNewFieldToForm(NewFieldViewModel field, ObjectId formId)
         {
-            throw new NotImplementedException();
+            ObjectId fieldObjectId = ObjectId.GenerateNewId();
+
+            FieldViewModel fieldViewModel = new FieldViewModel
+            {
+                Id = fieldObjectId,
+                formId = formId,
+                createdAt = DateTime.UtcNow,
+                index = field.index,
+                fieldType = field.fieldType,
+                value = field.value,
+            };
+
+            await formCollection.UpdateOneAsync(_ => _.Id == formId,
+                Builders<FormViewModel>.Update.Push<ObjectId>(_ => _.fields, fieldObjectId));
+            await fieldCollection.InsertOneAsync(fieldViewModel);
+
+            return fieldViewModel;
         }
 
-        public Task<FieldViewModel> UpdateField(FieldViewModel field, string formId)
+        public async Task<FormViewModel> UpdateFormTitle(ObjectId formId, string newFormTitle)
         {
-            throw new NotImplementedException();
+            UpdateResult formUpdateResult = await formCollection.UpdateOneAsync(_ => _.Id == formId,
+                Builders<FormViewModel>.Update.Set(_ => _.formTitle, newFormTitle));
+
+            if (formUpdateResult.IsAcknowledged)
+            {
+                var formTask = await formCollection.FindAsync(_ => _.Id == formId);
+                return await formTask.SingleOrDefaultAsync();
+            }
+            else
+                return null;
         }
 
-        public Task<FormObjectViewModel> UpdateFormTitle(string formId, string newFormTitle)
+        public async Task<FieldViewModel> UpdateField(FieldViewModel field, ObjectId fieldId)
         {
-            throw new NotImplementedException();
+            UpdateResult fieldUpdateResult = await fieldCollection.UpdateOneAsync(_ => _.Id == fieldId,
+                Builders<FieldViewModel>.Update
+                .Set(_ => _.title, field.title)
+                .Set(_ => _.fieldType, field.fieldType)
+                .Set(_ => _.index, field.index)
+                .Set(_ => _.value, field.value));
+
+            if (fieldUpdateResult.IsAcknowledged)
+            {
+                var fieldTask = await fieldCollection.FindAsync(_ => _.Id == fieldId);
+                return await fieldTask.SingleOrDefaultAsync();
+            }
+            else
+                return null;
         }
 
-        public Task<bool> DeleteField(string fieldId, string formId)
+        public async Task<bool> DeleteField(ObjectId fieldId, ObjectId formId)
         {
-            throw new NotImplementedException();
+            UpdateResult formUpdateResult = await formCollection.UpdateOneAsync(_ => _.Id == formId,
+                Builders<FormViewModel>.Update
+                .Pull(_ => _.fields, fieldId));
+            if (!formUpdateResult.IsAcknowledged)
+                return false;
+
+            DeleteResult fieldDeleteResult = await fieldCollection.DeleteOneAsync(_ => _.Id == fieldId);
+            return fieldDeleteResult.IsAcknowledged;
         }
 
-        public Task<bool> DeleteForm(string formId)
+        public async Task<bool> DeleteForm(ObjectId formId)
         {
-            throw new NotImplementedException();
+            DeleteResult formDeleteResult = await formCollection.DeleteOneAsync(_ => _.Id == formId);
+            if (!formDeleteResult.IsAcknowledged)
+                return false;
+
+            await fieldCollection.DeleteManyAsync(_ => _.formId == formId);
+
+            return true;
         }
 
-        public Task<bool> DeleteFormsCreatedBy(string createdBy)
+        public async Task<bool> DeleteFormsCreatedBy(string createdBy)
         {
-            throw new NotImplementedException();
+            var formTask = await formCollection.FindAsync(_ => _.createdBy == createdBy);
+            List<FormViewModel> forms = await formTask.ToListAsync();
+            HashSet<ObjectId> formObjectIds = new HashSet<ObjectId>(forms.Select(_ => _.Id));
+
+
+            DeleteResult formDeleteResult = await formCollection.DeleteManyAsync(_ => _.createdBy == createdBy);
+            if (!formDeleteResult.IsAcknowledged)
+                return false;
+
+            await fieldCollection.DeleteManyAsync(_ => formObjectIds.Contains(_.formId));
+
+            return true;
         }
     }
 }

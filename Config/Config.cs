@@ -1,5 +1,3 @@
-using System;
-
 namespace Forms.Config
 {
     public static class Config

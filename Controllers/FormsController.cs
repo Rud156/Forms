@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using Forms.Models.ResponseModels;
 using Forms.Services;
 
@@ -23,7 +24,22 @@ namespace Forms.Controllers
         [HttpGet("{id}")]
         public async Task<object> GetForm(string id)
         {
-            FormObjectViewModel form = await formService.GetForm(id);
+            bool parseSuccess = ObjectId.TryParse(id, out ObjectId formId);
+            if (!parseSuccess)
+                return BadRequest(new
+                {
+                    parseSuccess = false,
+                    message = "Invalid Object Id"
+                });
+
+            FormObjectViewModel form = await formService.GetForm(formId);
+            if (form == null)
+                return UnprocessableEntity(new
+                {
+                    success = false,
+                    message = "Invalid Form Id Supplied"
+                });
+
             return Ok(new
             {
                 success = true,

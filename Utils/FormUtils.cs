@@ -9,12 +9,17 @@ namespace Forms.Utils
     {
         public static FormObjectViewModel CombineFormAndFields(FormViewModel form, List<FieldViewModel> fields)
         {
-            FormObjectViewModel formObjectViewModel = new FormObjectViewModel();
-            formObjectViewModel.Id = form.Id;
-            formObjectViewModel.formTitle = form.formTitle;
-            formObjectViewModel.createdAt = form.createdAt;
-            formObjectViewModel.createdBy = form.createdBy;
-            formObjectViewModel.fields = fields.ToArray();
+            if (form == null)
+                return null;
+
+            FormObjectViewModel formObjectViewModel = new FormObjectViewModel
+            {
+                Id = form.Id,
+                formTitle = form.formTitle,
+                createdAt = form.createdAt,
+                createdBy = form.createdBy,
+                fields = fields.ToArray()
+            };
 
             return formObjectViewModel;
         }

@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using Forms.Models.DBModels;
 using Forms.Models.NewModels;
 using Forms.Models.ResponseModels;
@@ -9,24 +9,24 @@ namespace Forms.Services
 {
     public interface IFormService
     {
-        Task<FormObjectViewModel> GetForm(string formId);
+        Task<FormObjectViewModel> GetForm(ObjectId formId);
 
-        Task<FieldViewModel> GetField(string fieldId);
+        Task<FieldViewModel> GetField(ObjectId fieldId);
 
-        Task<IEnumerable<FormObjectViewModel>> GetFormsCreatedBy(string createdBy);
+        Task<IEnumerable<FormViewModel>> GetFormsCreatedBy(string createdBy);
 
         Task<FormObjectViewModel> CreateForm(NewFormViewModel form);
 
-        Task<FieldViewModel> AddNewFieldToForm(NewFieldViewModel field, string formId);
+        Task<FieldViewModel> AddNewFieldToForm(NewFieldViewModel field, ObjectId formId);
 
-        Task<FormObjectViewModel> UpdateFormTitle(string formId, string newFormTitle);
+        Task<FormViewModel> UpdateFormTitle(ObjectId formId, string newFormTitle);
 
-        Task<FieldViewModel> UpdateField(FieldViewModel field, string formId);
+        Task<FieldViewModel> UpdateField(FieldViewModel field, ObjectId fieldId);
 
-        Task<Boolean> DeleteField(string fieldId, string formId);
+        Task<bool> DeleteField(ObjectId fieldId, ObjectId formId);
 
-        Task<Boolean> DeleteForm(string formId);
+        Task<bool> DeleteForm(ObjectId formId);
 
-        Task<Boolean> DeleteFormsCreatedBy(string createdBy);
+        Task<bool> DeleteFormsCreatedBy(string createdBy);
     }
 }

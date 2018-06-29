@@ -1,5 +1,3 @@
-using System;
-
 namespace Forms.Models.NewModels
 {
     public class NewFormViewModel
