@@ -112,9 +112,9 @@ namespace Forms.Services
             ObjectId formId,
             ObjectId responseId)
         {
-            DeleteResult responseDeleteResult = await responseCollection.DeleteManyAsync(_ => _.Id == responseId);
+            DeleteResult responseDeleteResult = await responseCollection.DeleteOneAsync(_ => _.Id == responseId);
             if (!responseDeleteResult.IsAcknowledged)
-                throw new Exception("Unable to delete previous response");
+                throw new Exception("Unable to update previous response");
 
             FormObjectViewModel form = await GetForm(formId);
             FieldViewModel[] fields = form.fields;
@@ -133,7 +133,10 @@ namespace Forms.Services
         public async Task<bool> DeleteResponse(ObjectId responseId)
         {
             DeleteResult responseDeleteResult = await responseCollection.DeleteOneAsync(_ => _.Id == responseId);
-            return responseDeleteResult.IsAcknowledged;
+            if (!responseDeleteResult.IsAcknowledged)
+                throw new Exception("Unable to delete response");
+
+            return true;
         }
 
         public async Task<long> DeleteResponsesForForm(ObjectId formId)

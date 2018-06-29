@@ -6,7 +6,7 @@ using Forms.Models.NewModels;
 
 namespace Forms.ServiceInterfaces
 {
-    interface IResponseService
+    public interface IResponseService
     {
         Task<ResponseViewModel> GetResponse(ObjectId responseId);
 

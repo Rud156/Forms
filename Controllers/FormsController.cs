@@ -33,7 +33,7 @@ namespace Forms.Controllers
                 return BadRequest(new
                 {
                     success = false,
-                    message = "Invalid formId Id"
+                    message = "Invalid Form Id"
                 });
 
             FormObjectViewModel form = await formService.GetForm(formObjectId);
@@ -41,7 +41,7 @@ namespace Forms.Controllers
                 return NotFound(new
                 {
                     success = false,
-                    message = "Invalid Form Id Supplied"
+                    message = "Incorrect Form Requested"
                 });
 
             return Ok(new
@@ -68,7 +68,7 @@ namespace Forms.Controllers
                 return NotFound(new
                 {
                     success = false,
-                    message = "Invalid Field Id Supplied"
+                    message = "Incorrect Field Requested"
                 });
 
             return Ok(new
