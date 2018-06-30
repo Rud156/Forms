@@ -20,10 +20,8 @@ namespace Forms.Controllers
     {
         private readonly IResponseService responseService;
 
-        public ResponseController(IResponseService responseService)
-        {
+        public ResponseController(IResponseService responseService) =>
             this.responseService = responseService;
-        }
 
         [HttpGet("{responseId}")]
         public async Task<object> GetResponse(string responseId)

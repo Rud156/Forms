@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Forms.Models.NewModels
@@ -10,6 +11,6 @@ namespace Forms.Models.NewModels
         [Required]
         public string createdBy { get; set; }
 
-        public NewResponseValuesViewModel[] responseValues { get; set; }
+        public List<NewResponseValuesViewModel> responseValues { get; set; }
     }
 }

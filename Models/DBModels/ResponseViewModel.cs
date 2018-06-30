@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -20,6 +21,6 @@ namespace Forms.Models.DBModels
         public DateTime createdAt { get; set; }
 
         [BsonRequired]
-        public ResponseValueViewModel[] responseValues { get; set; }
+        public List<ResponseValueViewModel> responseValues { get; set; }
     }
 }

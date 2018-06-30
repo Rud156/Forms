@@ -71,9 +71,9 @@ namespace Forms.Services
         public async Task<ResponseViewModel> CreateResponse(NewResponseViewModel response, ObjectId formId)
         {
             FormObjectViewModel form = await GetForm(formId);
-            FieldViewModel[] fields = form.fields;
+            List<FieldViewModel> fields = form.fields;
 
-            if (fields.Length != response.responseValues.Length)
+            if (fields.Count != response.responseValues.Count)
                 throw new Exception("Responses do not match fields");
 
             bool fieldsValid = ResponseUtils.ResponseValidator(new List<FieldViewModel>(fields),
@@ -104,7 +104,7 @@ namespace Forms.Services
                 createdBy = response.createdBy,
                 createdAt = DateTime.UtcNow,
                 formId = formId,
-                responseValues = responseValues.ToArray()
+                responseValues = responseValues
             };
 
             await responseCollection.InsertOneAsync(responseViewModel);
@@ -120,9 +120,9 @@ namespace Forms.Services
                 throw new Exception("Unable to update previous response");
 
             FormObjectViewModel form = await GetForm(formId);
-            FieldViewModel[] fields = form.fields;
+            List<FieldViewModel> fields = form.fields;
 
-            if (fields.Length != response.responseValues.Length)
+            if (fields.Count != response.responseValues.Count)
                 throw new Exception("Responses do not match fields");
 
             bool fieldsValid = ResponseUtils.ResponseValidator(new List<FieldViewModel>(fields),

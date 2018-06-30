@@ -18,7 +18,7 @@ namespace Forms.Utils
                 formTitle = form.formTitle,
                 createdAt = form.createdAt,
                 createdBy = form.createdBy,
-                fields = fields.ToArray()
+                fields = fields
             };
 
             return formObjectViewModel;

@@ -20,10 +20,8 @@ namespace Forms.Controllers
     {
         private readonly IFormService formService;
 
-        public FormsController(IFormService formService)
-        {
+        public FormsController(IFormService formService) =>
             this.formService = formService;
-        }
 
         [HttpGet("{formId}")]
         public async Task<object> GetForm(string formId)

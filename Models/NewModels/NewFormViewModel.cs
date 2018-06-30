@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Forms.Models.NewModels
@@ -10,6 +11,6 @@ namespace Forms.Models.NewModels
         [Required]
         public string title { get; set; }
 
-        public NewFieldViewModel[] fields { get; set; }
+        public List<NewFieldViewModel> fields { get; set; }
     }
 }

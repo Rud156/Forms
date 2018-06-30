@@ -30,8 +30,8 @@ namespace Forms.Utils
                 {
                     if (responseType == TypeConstants.CHECKBOX_INPUT)
                     {
-                        string[] values = responseValues[i].value as string[];
-                        HashSet<string> fieldValue = new HashSet<string>(fields[i].value as string[]);
+                        List<string> values = responseValues[i].value as List<string>;
+                        HashSet<string> fieldValue = new HashSet<string>(fields[i].value as List<string>);
                         foreach (var value in values)
                         {
                             if (!fieldValue.Contains(value))
@@ -44,7 +44,7 @@ namespace Forms.Utils
                     else
                     {
                         string value = responseValues[i].value as string;
-                        string[] fieldValue = fields[i].value as string[];
+                        List<string> fieldValue = fields[i].value as List<string>;
                         if (!fieldValue.Contains(value))
                         {
                             formValid = false;

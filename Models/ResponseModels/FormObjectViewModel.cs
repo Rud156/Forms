@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using Forms.Models.DBModels;
 
@@ -14,6 +15,6 @@ namespace Forms.Models.ResponseModels
 
         public DateTime createdAt { get; set; }
 
-        public FieldViewModel[] fields { get; set; }
+        public List<FieldViewModel> fields { get; set; }
     }
 }
