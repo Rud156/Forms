@@ -1,26 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using Forms.Services;
-using Forms.ServiceInterfaces;
 using Forms.Models.DBModels;
 using Forms.Models.NewModels;
-using Forms.Models.ResponseModels;
 using Forms.Models.RequestModels;
+using Forms.Models.ResponseModels;
+using Forms.ServiceInterfaces;
+using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Forms.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    public class FormsController : Controller
+    public class FormController : Controller
     {
         private readonly IFormService formService;
 
-        public FormsController(IFormService formService) =>
+        public FormController(IFormService formService) =>
             this.formService = formService;
 
         [HttpGet("{formId}")]

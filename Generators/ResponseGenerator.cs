@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
 using Bogus;
-using MongoDB.Bson;
+using Forms.Models.ResponseModels;
 using Forms.Models.NewModels;
 using Forms.Utils;
-using System.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace Forms.Generators
 {
@@ -19,7 +18,7 @@ namespace Forms.Generators
             this.random = new Random();
         }
 
-        public NewResponseValuesViewModel GenerateResponseValue(string fieldId, string responseType,
+        public NewResponseValuesViewModel GenerateCorrectResponseValue(string fieldId, string responseType,
             int index, object value)
         {
             object resultValue;
@@ -58,6 +57,62 @@ namespace Forms.Generators
                 responseType = responseType,
                 index = index,
                 value = value
+            };
+        }
+
+        public NewResponseValuesViewModel GenerateInCorrectResponseValue(string fieldId, string responseType, int index)
+        {
+            List<string> values = new List<string>();
+            values.Add(faker.Random.Words(20));
+
+            object valueObject;
+            if (responseType != TypeConstants.CHECKBOX_INPUT)
+                valueObject = faker.Random.Words(20);
+            else
+                valueObject = values;
+
+            return new NewResponseValuesViewModel
+            {
+                fieldId = fieldId,
+                responseType = responseType,
+                index = index,
+                value = valueObject
+            };
+        }
+
+        public NewResponseViewModel GenerateRandomResponse(FormObjectViewModel form, float incorrectRatio)
+        {
+            string formId = form.Id.ToString();
+            string createdBy = faker.Name.FullName();
+
+            List<NewResponseValuesViewModel> responseValues = new List<NewResponseValuesViewModel>();
+            foreach (var field in form.fields)
+            {
+                float randomValue = (float)random.NextDouble();
+                if (randomValue < incorrectRatio)
+                    responseValues.Add(
+                            GenerateInCorrectResponseValue(
+                                field.Id.ToString(),
+                                field.fieldType,
+                                field.index
+                            )
+                        );
+                else
+                    responseValues.Add(
+                        GenerateCorrectResponseValue(
+                            field.Id.ToString(),
+                            field.fieldType,
+                            field.index,
+                            field.value
+                        )
+                    );
+            }
+
+            return new NewResponseViewModel
+            {
+                formId = formId,
+                createdBy = createdBy,
+                responseValues = responseValues
             };
         }
     }

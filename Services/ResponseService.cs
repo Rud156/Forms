@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using MongoDB.Bson;
-using MongoDB.Driver;
 using Forms.Models.DBModels;
 using Forms.Models.NewModels;
 using Forms.Models.ResponseModels;
 using Forms.ServiceInterfaces;
 using Forms.Utils;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Forms.Services
 {
@@ -84,7 +83,7 @@ namespace Forms.Services
             List<ResponseValueViewModel> responseValues = new List<ResponseValueViewModel>();
             foreach (var responseValue in response.responseValues)
             {
-                if (!TypeConstants.isValidFieldType(responseValue.responseType))
+                if (!TypeConstants.IsValidFieldType(responseValue.responseType))
                     throw new Exception("Invalid Response Type");
 
                 ResponseValueViewModel responseValueViewModel = new ResponseValueViewModel

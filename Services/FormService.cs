@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using MongoDB.Bson;
-using MongoDB.Driver;
 using Forms.Models.DBModels;
 using Forms.Models.NewModels;
 using Forms.Models.ResponseModels;
-using Forms.Utils;
 using Forms.ServiceInterfaces;
+using Forms.Utils;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Forms.Services
 {
@@ -68,7 +68,7 @@ namespace Forms.Services
             foreach (var field in form.fields)
             {
                 string fieldType = field.fieldType;
-                if (!TypeConstants.isValidFieldType(fieldType))
+                if (!TypeConstants.IsValidFieldType(fieldType))
                     throw new Exception("Invalid Field Type");
 
                 FieldViewModel fieldViewModel = new FieldViewModel
@@ -101,7 +101,7 @@ namespace Forms.Services
         {
             ObjectId fieldObjectId = ObjectId.GenerateNewId();
 
-            if (!TypeConstants.isValidFieldType(field.fieldType))
+            if (!TypeConstants.IsValidFieldType(field.fieldType))
                 throw new Exception("Invalid Field Type");
 
             FieldViewModel fieldViewModel = new FieldViewModel
@@ -136,7 +136,7 @@ namespace Forms.Services
 
         public async Task<FieldViewModel> UpdateField(FieldViewModel field, ObjectId formId, ObjectId fieldId)
         {
-            if (!TypeConstants.isValidFieldType(field.fieldType))
+            if (!TypeConstants.IsValidFieldType(field.fieldType))
                 throw new Exception("Invalid Field Type");
 
             UpdateResult fieldUpdateResult = await fieldCollection.UpdateOneAsync(

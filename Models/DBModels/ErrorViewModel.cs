@@ -1,5 +1,3 @@
-using System;
-
 namespace Forms.Models.DBModels
 {
     public class ErrorViewModel
