@@ -93,6 +93,14 @@ namespace Forms.Services
                     index = responseValue.index,
                     fieldId = ObjectId.Parse(responseValue.fieldId)
                 };
+
+                string responseType = responseValue.responseType;
+                if (responseType == TypeConstants.CHECKBOX_INPUT)
+                {
+                    var values = Constants.ConvertJsonObject(responseValue.value);
+                    responseValueViewModel.value = values;
+                }
+
                 responseValues.Add(responseValueViewModel);
             }
 

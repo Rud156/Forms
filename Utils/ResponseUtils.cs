@@ -1,5 +1,6 @@
 using Forms.Models.DBModels;
 using Forms.Models.NewModels;
+using System;
 using System.Collections.Generic;
 
 namespace Forms.Utils
@@ -26,10 +27,13 @@ namespace Forms.Utils
                     responseType != TypeConstants.FILE_UPLOAD
                 )
                 {
+                    Console.WriteLine(fields[i].value.GetType());
+
+                    HashSet<string> fieldValue = new HashSet<string>(fields[i].value as List<string>);
+
                     if (responseType == TypeConstants.CHECKBOX_INPUT)
                     {
-                        List<string> values = responseValues[i].value as List<string>;
-                        HashSet<string> fieldValue = new HashSet<string>(fields[i].value as List<string>);
+                        List<string> values = Constants.ConvertJsonObject(responseValues[i].value);
                         foreach (var value in values)
                         {
                             if (!fieldValue.Contains(value))
@@ -42,7 +46,6 @@ namespace Forms.Utils
                     else
                     {
                         string value = responseValues[i].value as string;
-                        List<string> fieldValue = fields[i].value as List<string>;
                         if (!fieldValue.Contains(value))
                         {
                             formValid = false;

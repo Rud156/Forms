@@ -77,9 +77,18 @@ namespace Forms.Services
                     fieldType = field.fieldType,
                     index = field.index,
                     title = field.title,
-                    createdAt = DateTime.UtcNow,
-                    value = field.value
+                    createdAt = DateTime.UtcNow
                 };
+
+                if (fieldType == TypeConstants.CHECKBOX_INPUT || fieldType == TypeConstants.DROP_DOWN_INPUT ||
+                    fieldType == TypeConstants.RADIO_INPUT)
+                {
+                    var values = Constants.ConvertJsonObject(field.value);
+                    fieldViewModel.value = values;
+                }
+                else
+                    fieldViewModel.value = field.value;
+
                 fields.Add(fieldViewModel);
             }
 
@@ -105,8 +114,9 @@ namespace Forms.Services
         public async Task<FieldViewModel> AddNewFieldToForm(NewFieldViewModel field, ObjectId formId)
         {
             ObjectId fieldObjectId = ObjectId.GenerateNewId();
+            string fieldType = field.fieldType;
 
-            if (!TypeConstants.IsValidFieldType(field.fieldType))
+            if (!TypeConstants.IsValidFieldType(fieldType))
                 throw new Exception("Invalid Field Type");
 
             FieldViewModel fieldViewModel = new FieldViewModel
@@ -115,9 +125,17 @@ namespace Forms.Services
                 formId = formId,
                 createdAt = DateTime.UtcNow,
                 index = field.index,
-                fieldType = field.fieldType,
-                value = field.value,
+                fieldType = field.fieldType
             };
+
+            if (fieldType == TypeConstants.CHECKBOX_INPUT || fieldType == TypeConstants.DROP_DOWN_INPUT ||
+                    fieldType == TypeConstants.RADIO_INPUT)
+            {
+                var values = Constants.ConvertJsonObject(field.value);
+                fieldViewModel.value = values;
+            }
+            else
+                fieldViewModel.value = field.value;
 
             await formCollection.UpdateOneAsync(_ => _.Id == formId,
                 Builders<FormViewModel>.Update.Push<ObjectId>(_ => _.fields, fieldObjectId));
@@ -144,13 +162,23 @@ namespace Forms.Services
             if (!TypeConstants.IsValidFieldType(field.fieldType))
                 throw new Exception("Invalid Field Type");
 
+            string fieldType = field.fieldType;
+            object fieldValue = field.value;
+
+            if (fieldType == TypeConstants.CHECKBOX_INPUT || fieldType == TypeConstants.DROP_DOWN_INPUT ||
+                   fieldType == TypeConstants.RADIO_INPUT)
+            {
+                var values = Constants.ConvertJsonObject(field.value);
+                fieldValue = values;
+            }
+
             UpdateResult fieldUpdateResult = await fieldCollection.UpdateOneAsync(
                 _ => _.Id == fieldId && _.formId == formId,
                 Builders<FieldViewModel>.Update
                 .Set(_ => _.title, field.title)
                 .Set(_ => _.fieldType, field.fieldType)
                 .Set(_ => _.index, field.index)
-                .Set(_ => _.value, field.value));
+                .Set(_ => _.value, fieldValue));
 
             if (fieldUpdateResult.IsAcknowledged)
             {

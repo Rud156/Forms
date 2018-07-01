@@ -19,7 +19,7 @@ namespace Forms.Models.DBModels
 
         [BsonRequired]
         public DateTime createdAt { get; set; }
-        
+
         public List<ObjectId> fields { get; set; }
     }
 }

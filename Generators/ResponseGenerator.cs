@@ -2,6 +2,7 @@ using Bogus;
 using Forms.Models.APIResponseModels;
 using Forms.Models.NewModels;
 using Forms.Utils;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -23,7 +24,7 @@ namespace Forms.Generators
         {
             object resultValue;
             if (responseType == TypeConstants.SINGLE_LINE_INPUT)
-                resultValue = faker.Lorem.Words(5);
+                resultValue = faker.Random.Words(5);
             else if (responseType == TypeConstants.PARAGRAPH_TEXT_INPUT)
                 resultValue = faker.Lorem.Sentences(3);
             else if (responseType == TypeConstants.DATE_INPUT)
@@ -34,7 +35,7 @@ namespace Forms.Generators
                 resultValue = faker.Internet.Url();
             else if (responseType == TypeConstants.CHECKBOX_INPUT)
             {
-                List<string> arrayValues = value as List<string>;
+                List<string> arrayValues = Constants.ConvertJsonObject(value);
                 float randomOptionValue = (float)random.NextDouble();
                 int randomNumber = (int)Math.Floor(randomOptionValue * arrayValues.Count);
                 List<string> results = new List<string>();
@@ -46,8 +47,8 @@ namespace Forms.Generators
             }
             else
             {
-                string[] arrayValues = value as string[];
-                resultValue = faker.Random.ArrayElement(arrayValues);
+                var values = Constants.ConvertJsonObject(value);
+                resultValue = faker.Random.ListItem<string>(values);
             }
 
             return new NewResponseValuesViewModel
@@ -55,7 +56,7 @@ namespace Forms.Generators
                 fieldId = fieldId,
                 responseType = responseType,
                 index = index,
-                value = value
+                value = resultValue
             };
         }
 
@@ -91,7 +92,7 @@ namespace Forms.Generators
                 if (randomValue < incorrectRatio)
                     responseValues.Add(
                             GenerateInCorrectResponseValue(
-                                field.Id.ToString(),
+                                field.Id,
                                 field.fieldType,
                                 field.index
                             )
@@ -99,7 +100,7 @@ namespace Forms.Generators
                 else
                     responseValues.Add(
                         GenerateCorrectResponseValue(
-                            field.Id.ToString(),
+                            field.Id,
                             field.fieldType,
                             field.index,
                             field.value

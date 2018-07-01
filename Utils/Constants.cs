@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace Forms.Utils
@@ -11,5 +12,12 @@ namespace Forms.Utils
             TypeConstants.PARAGRAPH_TEXT_INPUT, TypeConstants.RADIO_INPUT,
             TypeConstants.TIME_INPUT, TypeConstants.DATE_INPUT, TypeConstants.DROP_DOWN_INPUT,
             TypeConstants.CHECKBOX_INPUT, TypeConstants.FILE_UPLOAD };
+
+        public static List<string> ConvertJsonObject(object value)
+        {
+            JArray array = value as JArray;
+            var values = array.ToObject<List<string>>();
+            return values;
+        }
     }
 }

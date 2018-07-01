@@ -123,6 +123,7 @@ namespace Forms.Controllers
 
                 ResponseModel response = await $"{Constants.BASE_URL}"
                     .AppendPathSegment("response")
+                    .SetQueryParams(new { formId })
                     .PostJsonAsync(newResponse)
                     .ReceiveJson<ResponseModel>();
 
@@ -176,7 +177,7 @@ namespace Forms.Controllers
 
                     responses.Add(new ResponseBenchmarkModel
                     {
-                        responseId = response.response.Id.ToString(),
+                        responseId = response.response.Id,
                         timeElapsed = response.timeElapsed
                     });
                     totalTime += response.timeElapsed;
