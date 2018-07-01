@@ -1,4 +1,4 @@
-namespace Forms.Models.BenchmarkResultModels
+namespace Forms.Models.ResponseModels
 {
     public class ResponseBenchmarkModel
     {

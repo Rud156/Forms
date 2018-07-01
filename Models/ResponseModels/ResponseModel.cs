@@ -1,6 +1,6 @@
 using Forms.Models.DBModels;
 
-namespace Forms.Models.BenchmarkResultModels
+namespace Forms.Models.ResponseModels
 {
     public class ResponseModel
     {

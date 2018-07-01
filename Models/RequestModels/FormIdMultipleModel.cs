@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Forms.Models.BenchmarkResultModels
+namespace Forms.Models.RequestModels
 {
     public class FormIdMultipleModel
     {

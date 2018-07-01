@@ -1,9 +1,10 @@
 using Flurl;
 using Flurl.Http;
 using Forms.Generators;
-using Forms.Models.BenchmarkResultModels;
+using Forms.Models.APIResponseModels;
 using Forms.Models.DBModels;
 using Forms.Models.NewModels;
+using Forms.Models.RequestModels;
 using Forms.Models.ResponseModels;
 using Forms.ServiceInterfaces;
 using Forms.Utils;
@@ -121,10 +122,10 @@ namespace Forms.Controllers
 
                 var watch = Stopwatch.StartNew();
 
-                ResponseViewModel response = await $"{Constants.BASE_URL}"
+                ResponseModel response = await $"{Constants.BASE_URL}"
                     .AppendPathSegment("response")
                     .PostJsonAsync(newResponse)
-                    .ReceiveJson<ResponseViewModel>();
+                    .ReceiveJson<ResponseModel>();
 
                 watch.Stop();
 

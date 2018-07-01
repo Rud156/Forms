@@ -1,10 +1,9 @@
-﻿using Forms.Models.ResponseModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Forms.Models.BenchmarkResultModels
+namespace Forms.Models.APIResponseModels
 {
     public class FormResponseModel
     {

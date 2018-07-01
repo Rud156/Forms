@@ -1,6 +1,6 @@
-namespace Forms.Models.BenchmarkResultModels
+namespace Forms.Models.APIResponseModels
 {
-    public class FieldResponseModel
+    public class FieldViewResponseModel
     {
         public string Id { get; set; }
 

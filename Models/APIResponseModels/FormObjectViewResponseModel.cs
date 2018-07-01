@@ -1,10 +1,8 @@
-using Forms.Models.BenchmarkResultModels;
-using Forms.Models.DBModels;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 
-namespace Forms.Models.ResponseModels
+namespace Forms.Models.APIResponseModels
 {
     public class FormObjectViewModelResponse
     {
@@ -16,6 +14,6 @@ namespace Forms.Models.ResponseModels
 
         public string createdAt { get; set; }
 
-        public List<FieldResponseModel> fields { get; set; }
+        public List<FieldViewResponseModel> fields { get; set; }
     }
 }
