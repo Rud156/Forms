@@ -10,6 +10,6 @@ namespace Forms.Models.BenchmarkResultModels
     {
         public bool success { get; set; }
 
-        public FormObjectViewModel form { get; set; }
+        public FormObjectViewModelResponse form { get; set; }
     }
 }

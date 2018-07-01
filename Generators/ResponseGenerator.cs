@@ -80,9 +80,9 @@ namespace Forms.Generators
             };
         }
 
-        public NewResponseViewModel GenerateRandomResponse(FormObjectViewModel form, float incorrectRatio)
+        public NewResponseViewModel GenerateRandomResponse(FormObjectViewModelResponse form, float incorrectRatio)
         {
-            string formId = form.Id.ToString();
+            string formId = form.Id;
             string createdBy = faker.Name.FullName();
 
             List<NewResponseValuesViewModel> responseValues = new List<NewResponseValuesViewModel>();

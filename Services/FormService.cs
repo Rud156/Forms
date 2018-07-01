@@ -27,11 +27,11 @@ namespace Forms.Services
             client = new MongoClient(mongoUrl);
             database = client.GetDatabase(Config.Config.DBName);
 
-            bool mongoLive = database.RunCommandAsync((Command<BsonDocument>)"{ping:1}").Wait(1000);
-            if (mongoLive)
-                Console.WriteLine("Connected to MongoDB");
-            else
-                throw new Exception("Unable to connect to MongoDB. Aborting...");
+            // bool mongoLive = database.RunCommandAsync((Command<BsonDocument>)"{ping:1}").Wait(1000);
+            // if (mongoLive)
+            //     Console.WriteLine("Connected to MongoDB");
+            // else
+            //     throw new Exception("Unable to connect to MongoDB. Aborting...");
 
 
             formCollection = database.GetCollection<FormViewModel>(Config.Config.FormCollectionName);

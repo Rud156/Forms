@@ -57,16 +57,16 @@ namespace Forms.Controllers
                     NewFormViewModel newForm = formGenerator.GenerateRandomForm(fieldCountValue);
                     watch = Stopwatch.StartNew();
 
-                    FormObjectViewModel form = await $"{Constants.BASE_URL}"
+                    FormResponseModel formResponse = await $"{Constants.BASE_URL}"
                         .AppendPathSegment("form")
                         .PostJsonAsync(newForm)
-                        .ReceiveJson<FormObjectViewModel>();
+                        .ReceiveJson<FormResponseModel>();
 
                     watch.Stop();
 
                     forms.Add(new FormBenchmarkResponseModel
                     {
-                        formId = form.Id.ToString(),
+                        formId = formResponse.form.Id,
                         timeElapsed = watch.ElapsedMilliseconds
                     });
                 }
@@ -148,16 +148,56 @@ namespace Forms.Controllers
         }
 
         [HttpGet("responses")]
-        public async Task<object> CreateMultipleResponseBenchmark([FromBody] FormIdMultipleModel formIds)
+        public async Task<object> CreateMultipleResponseBenchmark([FromBody] FormIdMultipleModel formIds,
+            [FromQuery] string incorrectRatio)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new
                 {
                     success = false,
-                    message = "Invalid Params Requested"
+                    message = "Invalid Request Params"
                 });
 
-            throw new NotImplementedException();
+            bool incorrectRatioParseSuccess = float.TryParse(incorrectRatio, out float incorrectRatioValue);
+            if (!incorrectRatioParseSuccess)
+                incorrectRatioValue = 0;
+
+            List<ResponseBenchmarkModel> responses = new List<ResponseBenchmarkModel>();
+
+            try
+            {
+                foreach (var formId in formIds.formId)
+                {
+                    ResponseModel response = await $"{Constants.BASE_URL}"
+                        .AppendPathSegment("benchmark")
+                        .AppendPathSegment("response")
+                        .SetQueryParams(new { formId, incorrectRatio })
+                        .PostJsonAsync(new { })
+                        .ReceiveJson<ResponseModel>();
+
+                    responses.Add(new ResponseBenchmarkModel
+                    {
+                        responseId = response.response.Id.ToString(),
+                        timeElapsed = response.timeElapsed
+                    });
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    responses,
+                    totalResponsesCreated = responses.Count
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new JsonResult(new
+                {
+                    success = false,
+                    message = e.Message
+                });
+            }
         }
     }
 }
