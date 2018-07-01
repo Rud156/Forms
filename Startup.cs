@@ -1,4 +1,5 @@
-﻿using Forms.ServiceInterfaces;
+﻿using Forms.Filters;
+using Forms.ServiceInterfaces;
 using Forms.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,7 +29,10 @@ namespace Forms
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new ErrorHandlingFilter());
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
             services.AddResponseCompression();
             services.AddSingleton<IFormService, FormService>();

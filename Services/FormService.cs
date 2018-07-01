@@ -82,7 +82,12 @@ namespace Forms.Services
                 };
                 fields.Add(fieldViewModel);
             }
-            await fieldCollection.InsertManyAsync(fields);
+
+            if (fields.Count != 0)
+                await fieldCollection.InsertManyAsync(fields);
+
+            IEnumerable<ObjectId> fieldIds = from _ in fields
+                                             select _.Id;
 
             FormViewModel formViewModel = new FormViewModel
             {
@@ -90,6 +95,7 @@ namespace Forms.Services
                 createdAt = DateTime.UtcNow,
                 createdBy = form.createdBy,
                 formTitle = form.title,
+                fields = fieldIds.ToList()
             };
 
             await formCollection.InsertOneAsync(formViewModel);

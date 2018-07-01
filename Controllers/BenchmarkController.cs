@@ -48,6 +48,7 @@ namespace Forms.Controllers
 
             List<FormBenchmarkModel> forms = new List<FormBenchmarkModel>();
             Stopwatch watch;
+            long totalTime = 0;
 
             try
             {
@@ -68,12 +69,15 @@ namespace Forms.Controllers
                         formId = formResponse.form.Id,
                         timeElapsed = watch.ElapsedMilliseconds
                     });
+                    totalTime += watch.ElapsedMilliseconds;
                 }
 
                 return Ok(new
                 {
                     success = true,
                     totalFormsCreated = forms.Count,
+                    totalTime,
+                    averageTime = totalTime / forms.Count,
                     forms
                 });
             }
@@ -158,6 +162,7 @@ namespace Forms.Controllers
                 incorrectRatioValue = 0;
 
             List<ResponseBenchmarkModel> responses = new List<ResponseBenchmarkModel>();
+            long totalTime = 0;
 
             try
             {
@@ -174,13 +179,16 @@ namespace Forms.Controllers
                         responseId = response.response.Id.ToString(),
                         timeElapsed = response.timeElapsed
                     });
+                    totalTime += response.timeElapsed;
                 }
 
                 return Ok(new
                 {
                     success = true,
-                    responses,
-                    totalResponsesCreated = responses.Count
+                    totalResponsesCreated = responses.Count,
+                    totalTime,
+                    averageTime = totalTime / responses.Count,
+                    responses
                 });
             }
             catch (Exception e)

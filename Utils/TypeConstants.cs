@@ -16,7 +16,7 @@ namespace Forms.Utils
             return value == SINGLE_LINE_INPUT || value == PARAGRAPH_TEXT_INPUT ||
             value == RADIO_INPUT || value == DROP_DOWN_INPUT ||
             value == DATE_INPUT || value == TIME_INPUT ||
-            value == FILE_UPLOAD;
+            value == FILE_UPLOAD || value == CHECKBOX_INPUT;
         }
     }
 }

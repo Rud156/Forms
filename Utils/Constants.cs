@@ -4,7 +4,7 @@ namespace Forms.Utils
 {
     public static class Constants
     {
-        public const string BASE_URL = "http://localhost:3000/api";
+        public const string BASE_URL = "http://localhost:50586/api";
 
         public static IList<string> FieldTypes = new[] {
             TypeConstants.SINGLE_LINE_INPUT,
