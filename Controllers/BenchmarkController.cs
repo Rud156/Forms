@@ -2,7 +2,6 @@ using Flurl;
 using Flurl.Http;
 using Forms.Generators;
 using Forms.Models.APIResponseModels;
-using Forms.Models.DBModels;
 using Forms.Models.NewModels;
 using Forms.Models.RequestModels;
 using Forms.Models.ResponseModels;
@@ -21,8 +20,8 @@ namespace Forms.Controllers
     [Route("api/[controller]")]
     public class BenchmarkController : Controller
     {
-        FormGenerator formGenerator;
-        ResponseGenerator responseGenerator;
+        private FormGenerator formGenerator;
+        private ResponseGenerator responseGenerator;
         private readonly IFormService formService;
 
         public BenchmarkController(IFormService formService)
@@ -47,8 +46,7 @@ namespace Forms.Controllers
             if (!isValidTotalForms)
                 totalFormsValue = 1;
 
-
-            List<FormBenchmarkResponseModel> forms = new List<FormBenchmarkResponseModel>();
+            List<FormBenchmarkModel> forms = new List<FormBenchmarkModel>();
             Stopwatch watch;
 
             try
@@ -65,7 +63,7 @@ namespace Forms.Controllers
 
                     watch.Stop();
 
-                    forms.Add(new FormBenchmarkResponseModel
+                    forms.Add(new FormBenchmarkModel
                     {
                         formId = formResponse.form.Id,
                         timeElapsed = watch.ElapsedMilliseconds
@@ -103,7 +101,6 @@ namespace Forms.Controllers
                     message = "Invalid Form Id"
                 });
 
-
             bool incorrectRatioParseSuccess = float.TryParse(incorrectRatio, out float incorrectRatioValue);
             if (!incorrectRatioParseSuccess)
                 incorrectRatioValue = 0;
@@ -114,8 +111,6 @@ namespace Forms.Controllers
                     .AppendPathSegment("form")
                     .AppendPathSegment($"{formId}")
                     .GetJsonAsync<FormResponseModel>();
-
-
 
                 NewResponseViewModel newResponse = responseGenerator.GenerateRandomResponse(
                     formResponse.form, incorrectRatioValue);
@@ -138,7 +133,6 @@ namespace Forms.Controllers
             }
             catch (Exception e)
             {
-
                 Console.WriteLine(e.Message);
                 return new JsonResult(new
                 {
@@ -173,8 +167,7 @@ namespace Forms.Controllers
                         .AppendPathSegment("benchmark")
                         .AppendPathSegment("response")
                         .SetQueryParams(new { formId, incorrectRatio })
-                        .PostJsonAsync(new { })
-                        .ReceiveJson<ResponseModel>();
+                        .GetJsonAsync<ResponseModel>();
 
                     responses.Add(new ResponseBenchmarkModel
                     {

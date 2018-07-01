@@ -8,8 +8,8 @@ namespace Forms.Generators
 {
     public class FormGenerator
     {
-        Faker faker;
-        Random random;
+        private Faker faker;
+        private Random random;
 
         public FormGenerator()
         {

@@ -33,7 +33,6 @@ namespace Forms.Services
             // else
             //     throw new Exception("Unable to connect to MongoDB. Aborting...");
 
-
             formCollection = database.GetCollection<FormViewModel>(Config.Config.FormCollectionName);
             fieldCollection = database.GetCollection<FieldViewModel>(Config.Config.FieldCollectionName);
         }
@@ -184,7 +183,6 @@ namespace Forms.Services
             var formTask = await formCollection.FindAsync(_ => _.createdBy == createdBy);
             List<FormViewModel> forms = await formTask.ToListAsync();
             HashSet<ObjectId> formObjectIds = new HashSet<ObjectId>(forms.Select(_ => _.Id));
-
 
             DeleteResult formDeleteResult = await formCollection.DeleteManyAsync(_ => _.createdBy == createdBy);
             if (!formDeleteResult.IsAcknowledged)

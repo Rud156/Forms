@@ -116,7 +116,6 @@ namespace Forms.Controllers
                     StatusCode = 500
                 };
             }
-
         }
 
         [HttpPut("{formId}/field")]
@@ -159,7 +158,6 @@ namespace Forms.Controllers
                     StatusCode = 500
                 };
             }
-
         }
 
         [HttpPatch("{formId}")]

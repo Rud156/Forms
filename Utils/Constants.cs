@@ -5,6 +5,7 @@ namespace Forms.Utils
     public static class Constants
     {
         public const string BASE_URL = "http://localhost:3000/api";
+
         public static IList<string> FieldTypes = new[] {
             TypeConstants.SINGLE_LINE_INPUT,
             TypeConstants.PARAGRAPH_TEXT_INPUT, TypeConstants.RADIO_INPUT,

@@ -1,6 +1,6 @@
 namespace Forms.Models.ResponseModels
 {
-    public class FormBenchmarkResponseModel
+    public class FormBenchmarkModel
     {
         public string formId;
         public long timeElapsed;

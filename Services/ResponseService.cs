@@ -48,7 +48,6 @@ namespace Forms.Services
             return FormUtils.CombineFormAndFields(form, fields);
         }
 
-
         public async Task<ResponseViewModel> GetResponse(ObjectId responseId)
         {
             var responseTask = await responseCollection.FindAsync(_ => _.Id == responseId);

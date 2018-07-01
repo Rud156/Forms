@@ -7,6 +7,5 @@ namespace Forms.Models.ResponseModels
         public bool success { get; set; }
         public ResponseViewModel response { get; set; }
         public long timeElapsed { get; set; }
-
     }
 }

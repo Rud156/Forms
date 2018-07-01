@@ -1,6 +1,5 @@
 using Bogus;
 using Forms.Models.APIResponseModels;
-using Forms.Models.ResponseModels;
 using Forms.Models.NewModels;
 using Forms.Utils;
 using System;
@@ -10,8 +9,8 @@ namespace Forms.Generators
 {
     public class ResponseGenerator
     {
-        Faker faker;
-        Random random;
+        private Faker faker;
+        private Random random;
 
         public ResponseGenerator()
         {
@@ -50,7 +49,6 @@ namespace Forms.Generators
                 string[] arrayValues = value as string[];
                 resultValue = faker.Random.ArrayElement(arrayValues);
             }
-
 
             return new NewResponseValuesViewModel
             {
