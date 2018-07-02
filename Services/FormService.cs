@@ -125,7 +125,8 @@ namespace Forms.Services
                 formId = formId,
                 createdAt = DateTime.UtcNow,
                 index = field.index,
-                fieldType = field.fieldType
+                fieldType = field.fieldType,
+                title = field.title
             };
 
             if (fieldType == TypeConstants.CHECKBOX_INPUT || fieldType == TypeConstants.DROP_DOWN_INPUT ||
@@ -150,14 +151,12 @@ namespace Forms.Services
                 Builders<FormViewModel>.Update.Set(_ => _.formTitle, newFormTitle));
 
             if (formUpdateResult.IsAcknowledged)
-            {
                 return await GetForm(formId);
-            }
             else
                 throw new Exception("Unable to update form title");
         }
 
-        public async Task<FieldViewModel> UpdateField(FieldViewModel field, ObjectId formId, ObjectId fieldId)
+        public async Task<FieldViewModel> UpdateField(NewFieldViewModel field, ObjectId formId, ObjectId fieldId)
         {
             if (!TypeConstants.IsValidFieldType(field.fieldType))
                 throw new Exception("Invalid Field Type");

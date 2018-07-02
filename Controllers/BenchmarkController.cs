@@ -132,8 +132,8 @@ namespace Forms.Controllers
                 return Ok(new
                 {
                     success = true,
-                    response,
-                    timeElapsed = watch.ElapsedMilliseconds
+                    timeElapsed = watch.ElapsedMilliseconds,
+                    response
                 });
             }
             catch (Exception e)

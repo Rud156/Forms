@@ -180,10 +180,11 @@ namespace Forms.Controllers
 
             try
             {
-                await formService.UpdateFormTitle(formObjectId, formTitleObject.title);
+                FormObjectViewModel form = await formService.UpdateFormTitle(formObjectId, formTitleObject.title);
                 return Ok(new
                 {
                     success = true,
+                    form
                 });
             }
             catch (Exception e)
@@ -201,7 +202,7 @@ namespace Forms.Controllers
         }
 
         [HttpPatch("{formId}/field/{fieldId}")]
-        public async Task<object> UpdateField(string formId, string fieldId, [FromBody]FieldViewModel field)
+        public async Task<object> UpdateField(string formId, string fieldId, [FromBody]NewFieldViewModel field)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new

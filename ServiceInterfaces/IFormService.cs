@@ -21,7 +21,7 @@ namespace Forms.ServiceInterfaces
 
         Task<FormObjectViewModel> UpdateFormTitle(ObjectId formId, string newFormTitle);
 
-        Task<FieldViewModel> UpdateField(FieldViewModel field, ObjectId formId, ObjectId fieldId);
+        Task<FieldViewModel> UpdateField(NewFieldViewModel field, ObjectId formId, ObjectId fieldId);
 
         Task<bool> DeleteField(ObjectId formId, ObjectId fieldId);
 
